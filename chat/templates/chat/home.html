@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% load static %} 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="{% static 'chat/style.css/' %}">
+
+    </head>
+    <body>
+        <div class="navbar" id="navbarContainer">
+            <a class="navItem" href="/home/" id="navItem-1">HOME</a>
+            <a class="navItem" href="/login/" id="navItem-3">LOGIN</a>
+            <a class="navItem" href="/register/" id="navItem-2">Register</a>
+        </div>
+        <div id="container">
+            {% block content %}
+                
+            {% endblock %}
+        </div>
+        
+    </body>
+
+    
+</html>

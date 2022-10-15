@@ -1,0 +1,151 @@
+<html>
+    {% extends "./home.html/" %}
+    <head>
+        {% load static %} 
+
+    </head>
+    <body>
+        {% block content %}
+        <div id="userRooms">
+            <ul style="font-size: 18px;" id="userRoomList"><span style="font-size: 20px;">Your Chat Rooms</span> <br><br>
+
+            </ul>
+        </div>
+
+        <div id="roomContainer">
+            <div name="msgContainer" id="mContain">
+
+            </div>
+
+            <div id="roomInput">
+                <label for="messege">Messege: </label>
+                <br>
+                <input type="text" id="messege" name="messegeText"></input>
+                <br>
+                <br>
+                <button id="submit" name="sendMessege" type="submit">Send Messege</button>
+                <br>
+                <br>
+
+                <button type="button"><a class="noDecoration" href="/home/">Home</a></button>
+
+                <form method="POST" action="/delete_room/">
+                    {% csrf_token %}
+                    <P>The Room Name is {{roomName}} and the Room Owner is {{adminName}}.</P>
+                    <br>
+                    <br>
+                    <input type="hidden" name="deleteRoomName" value="{{roomName}}"/>
+                    <input type="hidden" name="deleteAdminName" value="{{adminName}}"/>
+                    <button name="deleteButton" type="submit">Delete The Room</button>
+                </form>
+
+                <form id="getMessegeForm">
+                    <button  id="getMessege" form="getMessegeForm" type="button">Get messege</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="userList">
+            <ul style="font-size: 18px;" id="userNameList"><span style="font-size: 20px;">Users In This Room</span> <br><br>
+
+            </ul>
+        </div>
+
+        <script>
+            var navItemUserName = "{{request.user.username}}";
+            var roomName = "{{roomName}}";
+            var adminName = "{{adminName}}";
+        </script>
+
+        <script src="{% static 'chat/update_nav_items.js' %}"></script>
+        <script src="{% static 'chat/get_room_list.js' %}"></script>
+        <script src="{% static 'chat/get_user_list.js' %}"></script>
+
+        <script>  
+            var token = document.getElementsByTagName("input")["csrfmiddlewaretoken"].value;
+
+            var input = document.getElementById("messege");
+            var btn = document.getElementById("submit");
+
+            btn.addEventListener("click", function() {
+                // alert(token);
+                let req = new XMLHttpRequest();
+                req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
+                req.onload = function() {
+                    console.log("Messege Sent!");
+                }
+                req.setRequestHeader("Content-Type", "application/json");
+                req.setRequestHeader("X-CSRFToken", token);
+                req.send(JSON.stringify(
+                    { messegeText:input.value  }
+                ));
+            });
+
+
+
+            var msg_btn = document.getElementById("getMessege");
+            var msg_window = document.getElementById("mContain");
+            var msg_counter = 0;
+
+            msg_btn.addEventListener("click", function() {
+                let req = new XMLHttpRequest();
+                req.open("GET", "/get_messege/{{roomName}}/{{adminName}}/", true);
+                req.onload = function() {
+                    // alert("ok");
+                    console.log(req.responseText);
+                    let json_msg = JSON.parse(req.responseText);
+                    if(json_msg.hasOwnProperty("error")) {
+                        alert("You do not have access to this room.");
+                    }
+                    else {
+                        let json_msg_length = json_msg["text"].length;
+                        let msg = "", start = 0;
+                        if(msg_counter==0) {
+                            msg_counter = json_msg_length;
+                        }
+                        else {
+                            start = msg_counter;
+                            msg_counter = json_msg_length;
+                        }
+                        for(let i=start; i<json_msg_length; ++i) {
+                            msg = msg + ("<p><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</p>");
+                        }
+                        if(msg_window.scrollTop==(msg_window.scrollHeight-msg_window.clientHeight)) {
+                            msg_window.insertAdjacentHTML("beforeend", msg);
+                            msg_window.scrollTop = msg_window.scrollHeight - msg_window.clientHeight;
+                        }
+                        else {
+                            msg_window.insertAdjacentHTML("beforeend", msg);
+                        }
+                    }
+                };
+                req.send();
+            });
+
+            var room_window = document.getElementById("roomContainer");
+            var input_window = document.getElementById("roomInput");
+            var initial_msg_window = msg_window.style.left, initial_input_window = input_window.style.left;
+            var win = room_window.getBoundingClientRect();
+            
+            if(win.width < 600) {
+                msg_window.style.left = 0;
+                input_window.style.left = 0;
+            }
+            window.addEventListener("resize", function() {
+                console.log(room_window);
+                win = room_window.getBoundingClientRect();
+                // win = room_window.style.width;
+                if(win.width<600) {
+                    msg_window.style.left = 0;
+                    input_window.style.left = 0;
+                }
+                else {
+                    msg_window.style.left = initial_msg_window;
+                    input_window.style.left = initial_input_window;
+                }
+            });
+            
+        </script>
+        {% endblock %}
+    </body>
+</html>

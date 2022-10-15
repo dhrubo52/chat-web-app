@@ -1,0 +1,38 @@
+<html>
+    {% extends "./home.html" %}
+    <head>
+        {% load static %} 
+        
+    </head>
+    <body>
+        {% block content %}
+        <div id="userRooms">
+            <ul style="font-size: 18px;" id="userRoomList"><span style="font-size: 20px;">Your Chat Rooms</span> <br><br>
+
+            </ul>
+        </div>
+
+        <div id="mainContainer">
+            <div id="createContainer">
+                <form method="POST" action="/create/" id="roomForm">
+                    {% csrf_token %}
+                    <div>
+                        <label for="room" id="roomLabel">Room Name:</label><br>
+                        <input type="text" id="room" name="roomName"/><br><br>
+                        <label for="roomPassword" id="roomPasswordLabel">Room Password:</label><br>
+                        <input type="password" id="roomPassword" name="roomPassword"/> <br><br>
+                    </div>
+                    <button type="submit" value="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+        <script>
+            var navItemUserName = "{{request.user.username}}";
+        </script>
+
+        <script src="{% static 'chat/update_nav_items.js' %}"></script>
+        <script src="{% static 'chat/get_room_list.js' %}"></script>
+        {% endblock  %}
+    </body>
+</html>

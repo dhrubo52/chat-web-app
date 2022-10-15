@@ -1,0 +1,14 @@
+<html>
+    <head>
+        {% load static %} 
+        
+    </head>
+    <body>
+        <form method="POST" id="userData" action="/register/">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" form="userData">Create Account</button>
+        </form>
+
+    </body>
+</html>

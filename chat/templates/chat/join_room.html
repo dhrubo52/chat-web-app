@@ -1,0 +1,40 @@
+<html>
+    <head>
+
+    </head>
+
+    <body>
+        <div id="userRooms">
+            <div id="userRoomsScroll">
+                <ul id="userRoomList">
+
+                </ul>
+            </div>
+        </div>
+
+        <div id="mainContainer">
+            <div id="createContainer">
+                <form method="POST" action="/room/join/{{roomName}}/{{adminName}}/" id="roomForm">
+                    {% csrf_token %}
+                    <div>
+                        <label for="roomPassword" id="roomPasswordLabel">
+                            Room Name: {{roomName}}<br>
+                            Room Admin: {{adminName}}<br> 
+                            Room Password:
+                        </label><br>
+                        <input type="password" id="roomPassword" name="roomPassword"/> <br><br>
+                    </div>
+                    <button type="submit" value="Submit">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+        <script>
+            var navItemUserName = "{{request.user.username}}";
+        </script>
+
+        <script src="{% static 'chat/update_nav_items.js' %}"></script>
+        <script src="{% static 'chat/get_room_list.js' %}"></script>
+    </body>
+
+</html>

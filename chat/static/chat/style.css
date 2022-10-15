@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+    height: 100vh;
+    width: 100vw;
+    background-image: linear-gradient(to bottom right, rgba(66, 103, 172, 0.2), rgba(66, 103, 172, 1));
+    font-family: Arial;
+}
+
+#container {
+    display: flex;
+    /* border: 2px solid orange; */
+    height: calc(100vh - 64px);
+    width: 100vw;
+    justify-content: space-between;
+    /* overflow-y: hidden; */
+    /* height: 100%;
+    width: 100%; */
+}
+
+/* TOP NAVBAR CSS */
+
+.navbar {
+    /* border: 5px solid black; */
+    background-image: linear-gradient(to right, rgba(53, 60, 92, 1), rgba(53, 60, 92, 0.2));
+    height: 56px;
+    overflow: hidden;
+}
+.navItem {
+    border: 2px solid red;
+    font-size: 20px;
+    color: rgb(246, 235, 255);
+    text-decoration: none;
+    text-align: center;
+    padding: 15px 14px;
+}
+#navItem-1 {
+    float: left;
+}
+#navItem-2, #navItem-3 {
+    float: right;
+}
+
+/* LOGIN PAGE CSS */
+
+#loginFormContainer {
+    position: fixed;
+    height: 200px;
+    width: 200px;
+    border: 2px solid green;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* USER HOME CSS */
+
+#mainContainer {
+    border: 2px solid black;
+    flex: 1;
+    /* position: absolute;
+    height: 400px;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+}
+#createContainer {
+    border: 3px solid blue;
+    position: relative;
+    height: 150px;
+    width: 200px;
+    top: 33%;
+    left: 27%;
+    /* transform: translate(-50%, -50%); */
+}
+
+/* ROOM LIST CSS (LEFT SIDEBAR) */
+
+#userRooms {
+    /* float: left; */
+    /* position: fixed; */
+    /* height: 100%; */
+    height: calc(100vh - 64px);
+    width: 20vw;
+    border: 2px solid green;
+    overflow-y: scroll;
+}
+
+#userRooms a {
+    text-decoration: none;
+    color: black;
+}
+
+/* USER LIST CSS (RIGHT SIDEBAR) */
+
+#userList {
+    /* float: right; */
+    /* position: fixed; */
+    /* height: 100%; */
+    height: calc(100vh - 64px);
+    width: 20vw;
+    border: 2px solid green;
+    overflow-y: scroll;
+}
+
+.listItem {
+    background-color: rgb(246, 235, 255);
+    border: 2px solid rgb(53, 60, 92);
+    border-radius: 4px;
+    margin-right: 4px;
+    /* overflow: hidden; */
+    word-wrap: break-word;
+}
+
+/* CHAT ROOM CSS */
+
+#mContain {
+    position: relative;
+    height: 25vw;
+    width: auto;
+    max-width: 600px;
+    left: calc((60vw - 600px)/2);
+    overflow-y: scroll;
+    border: 5px solid black;
+    /* padding-left: calc((60vw - 600px)/2); */
+}
+
+#roomContainer {
+    border: 2px solid blue;
+    flex: 1;
+    overflow-y: scroll;
+}
+
+#roomInput {
+    position: relative;
+    height: auto;
+    width: auto;
+    max-width: 600px;
+    left: calc((60vw - 600px)/2);
+    overflow-y: scroll;
+    border: 5px solid black;
+}

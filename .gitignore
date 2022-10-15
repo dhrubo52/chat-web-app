@@ -1,0 +1,5 @@
+db.sqlite3
+/chat_web_app
+/chat/__pycache__
+/chat/migrations
+/chat/__init__.py
