@@ -140,3 +140,17 @@ body {
     overflow-y: scroll;
     border: 5px solid black;
 }
+
+#message {
+    height: 100px;
+    width: 450px;
+}
+
+.messageBox {
+    background-color: rgb(246, 235, 255);
+    border: 1px solid black;
+    width: 400px;
+    margin-left: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

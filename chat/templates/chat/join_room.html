@@ -1,9 +1,11 @@
 <html>
+    {% extends './home.html/' %}
     <head>
-
+        {% load static %} 
     </head>
 
     <body>
+        {% block content %}
         <div id="userRooms">
             <div id="userRoomsScroll">
                 <ul id="userRoomList">
@@ -35,6 +37,7 @@
 
         <script src="{% static 'chat/update_nav_items.js' %}"></script>
         <script src="{% static 'chat/get_room_list.js' %}"></script>
+        {% endblock %}
     </body>
 
 </html>

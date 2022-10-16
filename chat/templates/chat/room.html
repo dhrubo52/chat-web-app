@@ -18,12 +18,12 @@
             </div>
 
             <div id="roomInput">
-                <label for="messege">Messege: </label>
+                <label for="message">Message: </label>
                 <br>
-                <input type="text" id="messege" name="messegeText"></input>
+                <textarea id="message" name="messegeText"></textarea>
                 <br>
                 <br>
-                <button id="submit" name="sendMessege" type="submit">Send Messege</button>
+                <button id="submit" name="sendMessage" type="submit">Send Messege</button>
                 <br>
                 <br>
 
@@ -64,7 +64,7 @@
         <script>  
             var token = document.getElementsByTagName("input")["csrfmiddlewaretoken"].value;
 
-            var input = document.getElementById("messege");
+            var input = document.getElementById("message");
             var btn = document.getElementById("submit");
 
             btn.addEventListener("click", function() {
@@ -81,13 +81,30 @@
                 ));
             });
 
-
+            input.addEventListener("keydown", function(e) {
+                if(e.shiftKey==true && e.key=="Enter") {
+                    if(input.value!="") {
+                        let req = new XMLHttpRequest();
+                        req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
+                        req.onload = function() {
+                            console.log("Messege Sent!");
+                        }
+                        req.setRequestHeader("Content-Type", "application/json");
+                        req.setRequestHeader("X-CSRFToken", token);
+                        req.send(JSON.stringify(
+                            { messegeText:input.value  }
+                        ));
+                        setTimeout(function() {input.value = ""}, 200);
+                    }
+                }
+            });
 
             var msg_btn = document.getElementById("getMessege");
             var msg_window = document.getElementById("mContain");
             var msg_counter = 0;
 
-            msg_btn.addEventListener("click", function() {
+            setInterval(
+            function() {
                 let req = new XMLHttpRequest();
                 req.open("GET", "/get_messege/{{roomName}}/{{adminName}}/", true);
                 req.onload = function() {
@@ -108,7 +125,8 @@
                             msg_counter = json_msg_length;
                         }
                         for(let i=start; i<json_msg_length; ++i) {
-                            msg = msg + ("<p><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</p>");
+                            // msg = msg + ("<div><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</div>");
+                            msg = msg + (`<div class="messageBox"><b>${json_msg["user"][i]} </b><br>${json_msg["text"][i]}</div><br>`);
                         }
                         if(msg_window.scrollTop==(msg_window.scrollHeight-msg_window.clientHeight)) {
                             msg_window.insertAdjacentHTML("beforeend", msg);
@@ -120,7 +138,44 @@
                     }
                 };
                 req.send();
-            });
+            }
+            , 2000);
+
+            // msg_btn.addEventListener("click", 
+            // function() {
+            //     let req = new XMLHttpRequest();
+            //     req.open("GET", "/get_messege/{{roomName}}/{{adminName}}/", true);
+            //     req.onload = function() {
+            //         // alert("ok");
+            //         console.log(req.responseText);
+            //         let json_msg = JSON.parse(req.responseText);
+            //         if(json_msg.hasOwnProperty("error")) {
+            //             alert("You do not have access to this room.");
+            //         }
+            //         else {
+            //             let json_msg_length = json_msg["text"].length;
+            //             let msg = "", start = 0;
+            //             if(msg_counter==0) {
+            //                 msg_counter = json_msg_length;
+            //             }
+            //             else {
+            //                 start = msg_counter;
+            //                 msg_counter = json_msg_length;
+            //             }
+            //             for(let i=start; i<json_msg_length; ++i) {
+            //                 msg = msg + ("<p><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</p>");
+            //             }
+            //             if(msg_window.scrollTop==(msg_window.scrollHeight-msg_window.clientHeight)) {
+            //                 msg_window.insertAdjacentHTML("beforeend", msg);
+            //                 msg_window.scrollTop = msg_window.scrollHeight - msg_window.clientHeight;
+            //             }
+            //             else {
+            //                 msg_window.insertAdjacentHTML("beforeend", msg);
+            //             }
+            //         }
+            //     };
+            //     req.send();
+            // });
 
             var room_window = document.getElementById("roomContainer");
             var input_window = document.getElementById("roomInput");
