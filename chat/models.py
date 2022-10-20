@@ -6,13 +6,13 @@ from django.contrib.auth.models import User
 class Room(models.Model):
     room_name = models.CharField(max_length=20)
     admin_name = models.CharField(max_length=20, null=True)
-    messege_count = models.IntegerField()
+    message_count = models.IntegerField()
     password = models.CharField(max_length=20)
     
     def __str__(self):
         return self.room_name
 
-class Messege(models.Model):
+class Message(models.Model):
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     user_name = models.CharField(max_length=20)
     text = models.TextField(max_length=1000)

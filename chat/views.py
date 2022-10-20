@@ -2,10 +2,10 @@ import json
 from msilib.schema import Error
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from .models import Room, Messege, UserRoomList
+from .models import Room, Message, UserRoomList
 from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -32,6 +32,7 @@ def register(request):
             for msg in form.errors:
                 print(form.errors[msg])
             # print(form.errors)
+            print(msg)
             return HttpResponse(form.errors[msg])
     else:
         form = UserCreationForm
@@ -39,6 +40,9 @@ def register(request):
             context={'form':form})        
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('/home/')
+
     if(request.method == 'POST'):
         userName = request.POST.get('username')
         password = request.POST.get('password')
@@ -119,7 +123,7 @@ def create_room(request):
             Please enter another Room Name.'''
             return HttpResponse(msg)
 
-        room = Room.objects.create(room_name=roomName, admin_name=userName, messege_count=0,  password=roomPassword)
+        room = Room.objects.create(room_name=roomName, admin_name=userName, message_count=0,  password=roomPassword)
         room.save()
 
         try:
@@ -154,7 +158,7 @@ def delete_room(request):
     return redirect("/home/")
 
 @login_required
-def send_messege(request, roomName, adminName):
+def send_message(request, roomName, adminName):
     if request.method == 'POST':
         userName = request.user.username
 
@@ -169,21 +173,18 @@ def send_messege(request, roomName, adminName):
             return HttpResponse('You do not have access to this room.')
         else:
             req = json.loads(request.body)
-            text = req['messegeText']
-            messege = Messege.objects.create(room=room, user_name=userName, text=text)
-            messege.save()
-            room.messege_count = room.messege_count + 1
+            text = req['messageText']
+            message = Message.objects.create(room=room, user_name=userName, text=text)
+            message.save()
+            room.message_count = room.message_count + 1
             room.save()
 
             return HttpResponse('ok')
     else:
         return HttpResponse('Error!')
 
-    # return render(request=request, template_name='main/my_room.html',
-    #      context={'roomName':roomName, 'ownerName':ownerName})
-
 @login_required
-def get_messege(request, roomName, adminName):
+def get_message(request, roomName, adminName):
     userName = request.user.username
 
     try:
@@ -199,7 +200,7 @@ def get_messege(request, roomName, adminName):
     except:
         return JsonResponse({'error':'You do not have access to this room.'})
     else:
-        msg = Messege.objects.filter(room=room)
+        msg = Message.objects.filter(room=room)
 
         text = []
         userName = []

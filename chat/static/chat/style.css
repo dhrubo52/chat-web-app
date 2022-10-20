@@ -40,6 +40,18 @@ body {
     float: right;
 }
 
+/* REGISTER PAGE CSS */
+#register {
+    /* border: 2px solid red; */
+    height: 200px;
+    width: 200px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
 /* LOGIN PAGE CSS */
 
 #loginFormContainer {
@@ -115,13 +127,16 @@ body {
 /* CHAT ROOM CSS */
 
 #mContain {
+    box-sizing: border-box;
     position: relative;
     height: 25vw;
     width: auto;
     max-width: 600px;
     left: calc((60vw - 600px)/2);
     overflow-y: scroll;
-    border: 5px solid black;
+    border: 5px solid rgb(53, 60, 92);
+    padding-top: 5px;
+    margin-top: 50px;
     /* padding-left: calc((60vw - 600px)/2); */
 }
 
@@ -132,13 +147,16 @@ body {
 }
 
 #roomInput {
+    box-sizing: border-box;
     position: relative;
     height: auto;
     width: auto;
     max-width: 600px;
     left: calc((60vw - 600px)/2);
     overflow-y: scroll;
-    border: 5px solid black;
+    border: 5px solid rgb(53, 60, 92);
+    padding-top: 5px;
+    padding-left: 5px;
 }
 
 #message {
@@ -147,6 +165,7 @@ body {
 }
 
 .messageBox {
+    /* box-sizing: border-box; */
     background-color: rgb(246, 235, 255);
     border: 1px solid black;
     width: 400px;

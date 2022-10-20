@@ -20,10 +20,10 @@
             <div id="roomInput">
                 <label for="message">Message: </label>
                 <br>
-                <textarea id="message" name="messegeText"></textarea>
+                <textarea id="message" name="messageText"></textarea>
                 <br>
                 <br>
-                <button id="submit" name="sendMessage" type="submit">Send Messege</button>
+                <button id="submit" name="sendMessage" type="submit">Send Message</button>
                 <br>
                 <br>
 
@@ -39,8 +39,8 @@
                     <button name="deleteButton" type="submit">Delete The Room</button>
                 </form>
 
-                <form id="getMessegeForm">
-                    <button  id="getMessege" form="getMessegeForm" type="button">Get messege</button>
+                <form id="getMessageForm">
+                    <button  id="getMessage" form="getMessageForm" type="button">Get message</button>
                 </form>
             </div>
         </div>
@@ -72,12 +72,12 @@
                 let req = new XMLHttpRequest();
                 req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
                 req.onload = function() {
-                    console.log("Messege Sent!");
+                    console.log("Message Sent!");
                 }
                 req.setRequestHeader("Content-Type", "application/json");
                 req.setRequestHeader("X-CSRFToken", token);
                 req.send(JSON.stringify(
-                    { messegeText:input.value  }
+                    { messageText:input.value  }
                 ));
             });
 
@@ -87,26 +87,26 @@
                         let req = new XMLHttpRequest();
                         req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
                         req.onload = function() {
-                            console.log("Messege Sent!");
+                            console.log("Message Sent!");
                         }
                         req.setRequestHeader("Content-Type", "application/json");
                         req.setRequestHeader("X-CSRFToken", token);
                         req.send(JSON.stringify(
-                            { messegeText:input.value  }
+                            { messageText:input.value  }
                         ));
                         setTimeout(function() {input.value = ""}, 200);
                     }
                 }
             });
 
-            var msg_btn = document.getElementById("getMessege");
+            var msg_btn = document.getElementById("getMessage");
             var msg_window = document.getElementById("mContain");
             var msg_counter = 0;
 
             setInterval(
             function() {
                 let req = new XMLHttpRequest();
-                req.open("GET", "/get_messege/{{roomName}}/{{adminName}}/", true);
+                req.open("GET", "/get_message/{{roomName}}/{{adminName}}/", true);
                 req.onload = function() {
                     // alert("ok");
                     console.log(req.responseText);
@@ -144,7 +144,7 @@
             // msg_btn.addEventListener("click", 
             // function() {
             //     let req = new XMLHttpRequest();
-            //     req.open("GET", "/get_messege/{{roomName}}/{{adminName}}/", true);
+            //     req.open("GET", "/get_message/{{roomName}}/{{adminName}}/", true);
             //     req.onload = function() {
             //         // alert("ok");
             //         console.log(req.responseText);
