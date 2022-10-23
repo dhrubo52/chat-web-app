@@ -11,11 +11,15 @@
         <div class="navbar" id="navbarContainer">
             <a class="navItem" href="/home/" id="navItem-1">HOME</a>
             <a class="navItem" href="/login/" id="navItem-3">LOGIN</a>
-            <a class="navItem" href="/register/" id="navItem-2">Register</a>
+            <a class="navItem" href="/create_account/" id="navItem-2">CREATE ACCOUNT</a>
         </div>
         <div id="container">
             {% block content %}
-                
+            <div id="homeOptions">
+                Create account with only username and password. <br><br><br><br>
+                <a href="/create_account/" id="homeCreateAccount">CREATE ACCOUNT</a> <br><br><br><br>
+                <a href="/login/" id="homeLogin">LOGIN</a>
+            </div>
             {% endblock %}
         </div>
         

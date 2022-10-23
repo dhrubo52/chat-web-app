@@ -17,12 +17,13 @@
                 <form method="POST" action="/create/" id="roomForm">
                     {% csrf_token %}
                     <div>
+                        CREATE A CHAT ROOM <br><br>
                         <label for="room" id="roomLabel">Room Name:</label><br>
                         <input type="text" id="room" name="roomName"/><br><br>
                         <label for="roomPassword" id="roomPasswordLabel">Room Password:</label><br>
                         <input type="password" id="roomPassword" name="roomPassword"/> <br><br>
                     </div>
-                    <button type="submit" value="Submit">Submit</button>
+                    <button type="submit" value="Submit">Create Room</button>
                 </form>
             </div>
         </div>

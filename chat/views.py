@@ -1,3 +1,4 @@
+from email.policy import HTTP
 import json
 from msilib.schema import Error
 from django.shortcuts import render, redirect
@@ -16,7 +17,7 @@ def home(request):
 
     return render(request=request, template_name='chat/home.html')
 
-def register(request):
+def create_account(request):
     if request.user.is_authenticated:
         return redirect('/user_home/')
 
@@ -36,7 +37,7 @@ def register(request):
             return HttpResponse(form.errors[msg])
     else:
         form = UserCreationForm
-        return render(request=request, template_name='chat/register.html',
+        return render(request=request, template_name='chat/create_account.html',
             context={'form':form})        
 
 def login_user(request):
@@ -107,7 +108,7 @@ def enter_room(request, roomName, adminName):
         context={'roomName':roomName, 'adminName':adminName})
 
     return render(request = request, template_name='chat/room.html',
-        context={'roomName':roomName, 'adminName':adminName})
+        context={'roomName':roomName, 'adminName':adminName, 'password':room.password})
 
 @login_required
 def create_room(request):
@@ -116,7 +117,11 @@ def create_room(request):
         roomName = request.POST.get('roomName', 'default')
         roomPassword = request.POST.get('roomPassword')
 
-
+        if roomName == '':
+            return HttpResponse('Please enter a room name.')
+        if roomPassword == '':
+            return HttpResponse('Please enter a room password.')
+        
         if(Room.objects.filter(room_name=roomName, admin_name=userName)):
             msg = '''This room already exists.
             You can not create multiple rooms with the same name.
@@ -208,9 +213,7 @@ def get_message(request, roomName, adminName):
             text.append(i.text)
             userName.append(i.user_name)
 
-        # print(text)
-        return JsonResponse({'text': text, 'user': userName})
-        # return HttpResponse('ok')
+        return JsonResponse({'msgCount': room.message_count, 'text': text, 'user': userName})
 
 @login_required
 def get_room_list(request):

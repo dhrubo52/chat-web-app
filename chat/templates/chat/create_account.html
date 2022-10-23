@@ -6,8 +6,8 @@
     </head>
     <body>
         {% block content %}
-        <div id="register">
-            <form method="POST" id="userData" action="/register/">
+        <div id="createAccount">
+            <form method="POST" id="userData" action="/create_account/">
                 {% csrf_token %}
                 <label>Username:</label> <br>
                 {{ form.username }} <br><br>

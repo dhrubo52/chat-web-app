@@ -6,7 +6,7 @@ function updateNavItems() {
 
     navbarItems[2].innerHTML = "";
     navbarItems[2].innerHTML = navItemUserName; //navItemUserName is initialized in the html files
-    navbarItems[2].href = "#";
+    navbarItems[2].href = "/home/";
 }
 
 updateNavItems();

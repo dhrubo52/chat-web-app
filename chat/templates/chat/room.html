@@ -13,6 +13,11 @@
         </div>
 
         <div id="roomContainer">
+            <div id="roomInfo">{{roomName}} - Admin: {{adminName}}
+                <button id="getRoomInfo" type="button">SHARE ROOM ACCESS INFO</button>
+            </div>
+            <div id="shareRoomInfo"></div>
+
             <div name="msgContainer" id="mContain">
 
             </div>
@@ -20,28 +25,34 @@
             <div id="roomInput">
                 <label for="message">Message: </label>
                 <br>
-                <textarea id="message" name="messageText"></textarea>
+                <textarea id="message" name="messageText" placeholder="SHIFT+ENTER to send message"></textarea>
                 <br>
                 <br>
                 <button id="submit" name="sendMessage" type="submit">Send Message</button>
                 <br>
                 <br>
 
-                <button type="button"><a class="noDecoration" href="/home/">Home</a></button>
+                <!-- <button type="button"><a class="noDecoration" href="/home/">Home</a></button> -->
 
-                <form method="POST" action="/delete_room/">
-                    {% csrf_token %}
-                    <P>The Room Name is {{roomName}} and the Room Owner is {{adminName}}.</P>
-                    <br>
-                    <br>
-                    <input type="hidden" name="deleteRoomName" value="{{roomName}}"/>
-                    <input type="hidden" name="deleteAdminName" value="{{adminName}}"/>
-                    <button name="deleteButton" type="submit">Delete The Room</button>
-                </form>
+                <button id="deleteActivate" type="button">Delete The Room</button>
 
-                <form id="getMessageForm">
+                <div id="delete">
+                    <form method="POST" action="/delete_room/">
+                        {% csrf_token %}
+                        <P style="color: white;">ARE YOU SURE YOU WANT TO DELETE THE ROOM {{roomName}}?<br>
+                        THIS ACTION CANNOT BE REVERSED!</P>
+                        <br>
+                        <br>
+                        <input type="hidden" name="deleteRoomName" value="{{roomName}}"/>
+                        <input type="hidden" name="deleteAdminName" value="{{adminName}}"/>
+                        <button id="deleteButton" type="submit">Delete</button>
+                        <button id="deleteCancel" type="button">Cancel</button>
+                    </form>
+                </div>
+
+                <!-- <form id="getMessageForm">
                     <button  id="getMessage" form="getMessageForm" type="button">Get message</button>
-                </form>
+                </form> -->
             </div>
         </div>
         
@@ -61,7 +72,33 @@
         <script src="{% static 'chat/get_room_list.js' %}"></script>
         <script src="{% static 'chat/get_user_list.js' %}"></script>
 
-        <script>  
+        <script>
+
+            // SHARE ROOM INFO
+
+            var infoBtn = document.getElementById("getRoomInfo");
+            var roomInfo = document.getElementById("shareRoomInfo");
+            // var closeRoomInfo = document.getElementById("closeRoomInfo");
+            var shareUrl = document.location.href;
+
+            infoBtn.addEventListener("click", function() {
+                roomInfo.innerHTML = `
+                SHARE THE URL AND PASSWORD FOR OTHERS TO JOIN THIS ROOM. <br><br><br><br>
+                ${shareUrl} <br><br><br><br>
+                PASSWORD: {{password}} <br><br><br><br>
+                <button type="button" onclick="closeRoomInfo()">Close</button>
+                `;
+                roomInfo.style.visibility = "visible";
+                roomInfo.style.zIndex = 100;
+            });
+
+            function closeRoomInfo() {
+                roomInfo.style.visibility = "hidden";
+                roomInfo.style.zIndex = -100;
+            }
+
+            // SEND MESSAGE
+
             var token = document.getElementsByTagName("input")["csrfmiddlewaretoken"].value;
 
             var input = document.getElementById("message");
@@ -98,6 +135,8 @@
                     }
                 }
             });
+
+            // GET MESSAGE
 
             var msg_btn = document.getElementById("getMessage");
             var msg_window = document.getElementById("mContain");
@@ -176,6 +215,24 @@
             //     };
             //     req.send();
             // });
+            
+            // Delete Room
+            
+            var del_activate = document.getElementById("deleteActivate");
+            var del = document.getElementById("delete");
+            var del_cancel = document.getElementById("deleteCancel");
+
+            del_activate.addEventListener("click", function() {
+                del.style.visibility = "visible";
+                del.style.zIndex = 100;
+            });
+
+            del_cancel.addEventListener("click", function() {
+                del.style.visibility = "hidden";
+                del.style.zIndex = -100;
+            });
+
+            // WINDOW RESIZE
 
             var room_window = document.getElementById("roomContainer");
             var input_window = document.getElementById("roomInput");
