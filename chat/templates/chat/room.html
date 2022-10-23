@@ -32,8 +32,6 @@
                 <br>
                 <br>
 
-                <!-- <button type="button"><a class="noDecoration" href="/home/">Home</a></button> -->
-
                 <button id="deleteActivate" type="button">Delete The Room</button>
 
                 <div id="delete">
@@ -49,10 +47,6 @@
                         <button id="deleteCancel" type="button">Cancel</button>
                     </form>
                 </div>
-
-                <!-- <form id="getMessageForm">
-                    <button  id="getMessage" form="getMessageForm" type="button">Get message</button>
-                </form> -->
             </div>
         </div>
         
@@ -78,7 +72,6 @@
 
             var infoBtn = document.getElementById("getRoomInfo");
             var roomInfo = document.getElementById("shareRoomInfo");
-            // var closeRoomInfo = document.getElementById("closeRoomInfo");
             var shareUrl = document.location.href;
 
             infoBtn.addEventListener("click", function() {
@@ -105,7 +98,6 @@
             var btn = document.getElementById("submit");
 
             btn.addEventListener("click", function() {
-                // alert(token);
                 let req = new XMLHttpRequest();
                 req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
                 req.onload = function() {
@@ -145,26 +137,19 @@
             setInterval(
             function() {
                 let req = new XMLHttpRequest();
-                req.open("GET", "/get_message/{{roomName}}/{{adminName}}/", true);
+                req.open("GET", `/get_message/{{roomName}}/{{adminName}}/${msg_counter}/`, true);
                 req.onload = function() {
                     // alert("ok");
-                    console.log(req.responseText);
+                    // console.log(req.responseText);
                     let json_msg = JSON.parse(req.responseText);
                     if(json_msg.hasOwnProperty("error")) {
                         alert("You do not have access to this room.");
                     }
-                    else {
-                        let json_msg_length = json_msg["text"].length;
-                        let msg = "", start = 0;
-                        if(msg_counter==0) {
-                            msg_counter = json_msg_length;
-                        }
-                        else {
-                            start = msg_counter;
-                            msg_counter = json_msg_length;
-                        }
-                        for(let i=start; i<json_msg_length; ++i) {
-                            // msg = msg + ("<div><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</div>");
+                    else if(json_msg["msgCount"]>msg_counter) {
+                        let msg = "", start = msg_counter;
+                        msg_counter = json_msg["msgCount"];
+
+                        for(let i=start; i<msg_counter; ++i) {
                             msg = msg + (`<div class="messageBox"><b>${json_msg["user"][i]} </b><br>${json_msg["text"][i]}</div><br>`);
                         }
                         if(msg_window.scrollTop==(msg_window.scrollHeight-msg_window.clientHeight)) {
@@ -179,44 +164,8 @@
                 req.send();
             }
             , 2000);
-
-            // msg_btn.addEventListener("click", 
-            // function() {
-            //     let req = new XMLHttpRequest();
-            //     req.open("GET", "/get_message/{{roomName}}/{{adminName}}/", true);
-            //     req.onload = function() {
-            //         // alert("ok");
-            //         console.log(req.responseText);
-            //         let json_msg = JSON.parse(req.responseText);
-            //         if(json_msg.hasOwnProperty("error")) {
-            //             alert("You do not have access to this room.");
-            //         }
-            //         else {
-            //             let json_msg_length = json_msg["text"].length;
-            //             let msg = "", start = 0;
-            //             if(msg_counter==0) {
-            //                 msg_counter = json_msg_length;
-            //             }
-            //             else {
-            //                 start = msg_counter;
-            //                 msg_counter = json_msg_length;
-            //             }
-            //             for(let i=start; i<json_msg_length; ++i) {
-            //                 msg = msg + ("<p><b>"+json_msg["user"][i]+"</b><br>"+json_msg["text"][i]+"</p>");
-            //             }
-            //             if(msg_window.scrollTop==(msg_window.scrollHeight-msg_window.clientHeight)) {
-            //                 msg_window.insertAdjacentHTML("beforeend", msg);
-            //                 msg_window.scrollTop = msg_window.scrollHeight - msg_window.clientHeight;
-            //             }
-            //             else {
-            //                 msg_window.insertAdjacentHTML("beforeend", msg);
-            //             }
-            //         }
-            //     };
-            //     req.send();
-            // });
             
-            // Delete Room
+            // DELETE ROOM
             
             var del_activate = document.getElementById("deleteActivate");
             var del = document.getElementById("delete");
@@ -244,7 +193,7 @@
                 input_window.style.left = 0;
             }
             window.addEventListener("resize", function() {
-                console.log(room_window);
+                // console.log(room_window);
                 win = room_window.getBoundingClientRect();
                 // win = room_window.style.width;
                 if(win.width<600) {

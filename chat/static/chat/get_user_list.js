@@ -1,5 +1,4 @@
 function get_user_list() {
-    console.log("test");
     let userNameList = document.getElementById("userNameList");
     let req = new XMLHttpRequest();
     req.open("GET", `/get_user_list/${roomName}/${adminName}/`, true); // roomName, adminName initialized in the html files

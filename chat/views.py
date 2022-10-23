@@ -189,7 +189,7 @@ def send_message(request, roomName, adminName):
         return HttpResponse('Error!')
 
 @login_required
-def get_message(request, roomName, adminName):
+def get_message(request, roomName, adminName, msgCount):
     userName = request.user.username
 
     try:
@@ -205,15 +205,18 @@ def get_message(request, roomName, adminName):
     except:
         return JsonResponse({'error':'You do not have access to this room.'})
     else:
-        msg = Message.objects.filter(room=room)
+        if room.message_count > msgCount:
+            msg = Message.objects.filter(room=room)
 
-        text = []
-        userName = []
-        for i in msg:
-            text.append(i.text)
-            userName.append(i.user_name)
+            text = []
+            userName = []
+            for i in msg:
+                text.append(i.text)
+                userName.append(i.user_name)
 
-        return JsonResponse({'msgCount': room.message_count, 'text': text, 'user': userName})
+            return JsonResponse({'msgCount': room.message_count, 'text': text, 'user': userName})
+        else:
+            return JsonResponse({'msgCount': room.message_count})
 
 @login_required
 def get_room_list(request):
