@@ -1,7 +1,11 @@
+<!DOCTYPE html>
 <html>
     {% extends './home.html/' %}
     <head>
-        {% load static %} 
+        {% load static %}
+        {% block pageTitle %}
+        <title>Join: {{roomName}}</title>
+        {% endblock %} 
     </head>
 
     <body>
