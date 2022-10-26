@@ -104,7 +104,7 @@
                 let req = new XMLHttpRequest();
                 req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
                 req.onload = function() {
-                    console.log("Message Sent!");
+                    input.value = "";
                 }
                 req.setRequestHeader("Content-Type", "application/json");
                 req.setRequestHeader("X-CSRFToken", token);
@@ -119,14 +119,13 @@
                         let req = new XMLHttpRequest();
                         req.open("POST", "/send/{{roomName}}/{{adminName}}/", true);
                         req.onload = function() {
-                            console.log("Message Sent!");
+                            input.value = "";
                         }
                         req.setRequestHeader("Content-Type", "application/json");
                         req.setRequestHeader("X-CSRFToken", token);
                         req.send(JSON.stringify(
                             { messageText:input.value  }
                         ));
-                        setTimeout(function() {input.value = ""}, 200);
                     }
                 }
             });
