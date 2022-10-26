@@ -1,6 +1,4 @@
-from email.policy import HTTP
 import json
-from msilib.schema import Error
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from .models import Room, Message, UserRoomList
@@ -52,6 +50,8 @@ def login_user(request):
         
         if user is not None:
             login(request, user)
+        else:
+            return HttpResponse('Wrong username or password.')
 
         return redirect('/home/')
     else:
@@ -122,7 +122,7 @@ def create_room(request):
         if roomPassword == '':
             return HttpResponse('Please enter a room password.')
         
-        if(Room.objects.filter(room_name=roomName, admin_name=userName)):
+        if(Room.objects.filter(room_name=roomName, admin_name=userName).count()>0):
             msg = '''This room already exists.
             You can not create multiple rooms with the same name.
             Please enter another Room Name.'''
@@ -134,7 +134,7 @@ def create_room(request):
         try:
             user = User.objects.get(username=userName)
         except:
-            return
+            return HttpResponse('Error!')
 
         roomList = UserRoomList.objects.create(user=user,room=room)
         roomList.save()
